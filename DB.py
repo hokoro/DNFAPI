@@ -50,11 +50,45 @@ api_2 = APIClient()
 ## 직업 데이터 베이스 데이터 삽입
 
 jobs = api_2.get_jobs()['rows']
-## 기본 캐릭 정보
-for info in jobs:
-    insert_query_base = "INSERT INTO base_job (jobid , jobname) Values(%s, %s)"
-    values_base = (info['jobId'] , info['jobName'])
-    cursor.execute(insert_query_base , values_base)
+# ## 기본 캐릭 정보
+# for info in jobs:
+#     insert_query_base = "INSERT INTO base_job (jobid , jobname) Values(%s, %s)"
+#     values_base = (info['jobId'] , info['jobName'])
+#     cursor.execute(insert_query_base , values_base)
+#
+# conn.commit()
+# print('기본 직업 데이터 삽입 완료 ')
 
+
+cursor.execute("DROP TABLE IF EXISTS job_tree")
+cursor.execute("DROP TABLE IF EXISTS job_grow")
 conn.commit()
-print('기본 직업 데이터 삽입 완료 ')
+print("삭제 성공 ")
+
+
+## 1차 2차 3차 4차 전직 데이터 테이블 작성
+# for info in jobs:
+#     select_query = "SELECT id FROM base_job WHERE jobname = %s"
+#     cursor.execute(select_query, (info['jobName'],))
+#     result = cursor.fetchone()
+#     print(result , f'{info['jobName']}')
+#     for first in info['rows']:
+#         print(result[0])
+#         insert_query = "INSERT INTO job_grow (jobgrowid , jobgrowname , basejobid) Values(%s , %s , %s)"
+#         values = (first['jobGrowId'] , first['jobGrowName'] , result[0])
+#         cursor.execute(insert_query , values)
+#         second = first['next']
+#         insert_query = "INSERT INTO job_grow (jobgrowid, jobgrowname , basejobid) Values(%s,%s,%s)"
+#         values = (second['jobGrowId'] , second['jobGrowName'] , result[0])
+#         cursor.execute(insert_query , values)
+#         third = second['next']
+#         insert_query = "INSERT INTO job_grow (jobgrowid, jobgrowname , basejobid) Values(%s,%s,%s)"
+#         values = (third['jobGrowId'], third['jobGrowName'], result[0])
+#         cursor.execute(insert_query, values)
+#         if info['jobName'] != '다크나이트' and info['jobName'] != '크리에이터':
+#             last = third['next']
+#             insert_query = "INSERT INTO job_grow (jobgrowid, jobgrowname , basejobid) Values(%s,%s,%s)"
+#             values = (last['jobGrowId'], last['jobGrowName'], result[0])
+#             cursor.execute(insert_query, values)
+#         conn.commit()
+#
